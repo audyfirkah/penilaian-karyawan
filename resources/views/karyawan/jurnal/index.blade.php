@@ -17,6 +17,11 @@
                 <i class="fas fa-sync-alt"></i>
             </button>
         </div>
+        <div class="flex w-full justify-end">
+            <a href="{{ route('karyawan.jurnal.create', Auth::user()->karyawan->id_karyawan) }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center">
+                + Tambah
+            </a>
+        </div>
     </div>
 
     <!-- Table -->
@@ -45,8 +50,8 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 space-x-2">
-                        <a href="{{ route('admin.jurnal.edit', $jurnal->id_jurnal) }}" class="inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition"><i class="fas fa-edit"></i></a>
-                        <form action="{{ route('admin.jurnal.destroy', $jurnal->id_jurnal) }}" method="POST" class="inline delete-form">
+                        <a href="{{ route('karyawan.jurnal.edit', $jurnal->id_jurnal) }}" class="inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition"><i class="fas fa-edit"></i></a>
+                        <form action="{{ route('karyawan.jurnal.destroy', $jurnal->id_jurnal) }}" method="POST" class="inline delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="button" class="inline-flex items-center bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"><i class="fas fa-trash"></i></button>

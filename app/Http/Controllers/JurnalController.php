@@ -27,7 +27,7 @@ class JurnalController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'aktivitas' => 'required|string|max:255',
-            'lampiran' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+            'lampiran' => 'nullable|file|mimes:docx,mp4,pdf,jpg,png|max:2048',
         ]);
 
         $jurnal = Jurnal::findOrFail($id);
@@ -35,13 +35,18 @@ class JurnalController extends Controller
         $jurnal->aktivitas = $request->aktivitas;
 
         if ($request->hasFile('lampiran')) {
+            // Hapus lampiran lama jika ada
+            if ($jurnal->lampiran && file_exists(storage_path('app/public/lampiran_jurnal/' . $jurnal->lampiran))) {
+                unlink(storage_path('app/public/lampiran_jurnal/' . $jurnal->lampiran));
+            }
+
             $lampiran = $request->file('lampiran')->store('lampiran_jurnal', 'public');
             $jurnal->lampiran = basename($lampiran);
         }
 
         $jurnal->save();
 
-        return redirect()->route('admin.jurnal.index')->with('success', 'Jurnal berhasil diperbarui.');
+        return redirect()->route('admin.jurnal.show', $jurnal->id_karyawan)->with('success')->with('success', 'Jurnal berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -55,6 +60,6 @@ class JurnalController extends Controller
 
         $jurnal->delete();
 
-        return redirect()->route('admin.jurnal.index')->with('success', 'Jurnal berhasil dihapus.');
+        return redirect()->route('admin.jurnal.show', $jurnal->id_karyawan)->with('success')->with('success', 'Jurnal berhasil dihapus.');
     }
 }

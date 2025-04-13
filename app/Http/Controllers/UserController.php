@@ -96,68 +96,65 @@ class UserController extends Controller
 
     // Update an existing user in the database
     public function update(Request $request, $id)
-    {
-        // Validate the incoming request
+{
+    $user = User::findOrFail($id);
+
+    // Validasi umum
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id . ',id_user',
+        'role' => 'required|in:admin,karyawan,penilai,kepala sekolah',
+    ]);
+
+    // Update data dasar user
+    $user->update([
+        'nama' => $request->nama,
+        'email' => $request->email,
+        'role' => $request->role,
+    ]);
+
+    // Kalau role-nya karyawan, proses validasi tambahan dan update/insert ke tabel karyawan
+    if ($request->role === 'karyawan') {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id . ',id_user',
-            'role' => 'required|in:admin,karyawan,penilai,kepala sekolah',
+            'nip' => 'required|unique:karyawans,nip,' . optional($user->karyawan)->id_karyawan . ',id_karyawan',
+            'no_hp' => 'required',
+            'alamat' => 'required',
+            'tgl_masuk' => 'required|date',
+            'id_divisi' => 'required|exists:divisis,id_divisi',
             'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Find the user by ID
-        $user = User::findOrFail($id);
-        $user->update([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'role' => $request->role,
-        ]);
+        $fotoProfilName = optional($user->karyawan)->foto_profil;
 
-        // Handle profile picture update if role is 'karyawan'
-        if ($request->role === 'karyawan') {
-            $request->validate([
-                'nip' => 'required|unique:karyawans,nip,' . optional($user->karyawan)->id_karyawan . ',id_karyawan',
-                'no_hp' => 'required',
-                'alamat' => 'required',
-                'tgl_masuk' => 'required|date',
-                'id_divisi' => 'required|exists:divisis,id_divisi',
-            ]);
-
-            $fotoProfilName = optional($user->karyawan)->foto_profil;
-
-            if ($request->hasFile('foto_profil')) {
-                // Delete old photo if exists
-                if ($fotoProfilName && Storage::exists('public/images/foto_profil/' . $fotoProfilName)) {
-                    Storage::delete('public/images/foto_profil/' . $fotoProfilName);
-                }
-
-                // Upload the new photo
-                $foto = $request->file('foto_profil');
-                $fotoProfilName = Str::random(40) . '.' . $foto->getClientOriginalExtension();
-                $path = $foto->storeAs('images/foto_profil', $fotoProfilName, 'public');
-                // dd(storage_path('app/public/images/foto_profil/'.$fotoProfilName));
-
-                // dd($path);
-
+        // Kalau ada upload baru
+        if ($request->hasFile('foto_profil')) {
+            // Hapus foto lama jika ada
+            if ($fotoProfilName && Storage::disk('public')->exists('images/foto_profil/' . $fotoProfilName)) {
+                Storage::disk('public')->delete('images/foto_profil/' . $fotoProfilName);
             }
 
-            // Update or create Karyawan record
-            $user->karyawan()->updateOrCreate(
-                ['id_user' => $user->id_user],
-                [
-                    'nip' => $request->nip,
-                    'no_hp' => $request->no_hp,
-                    'alamat' => $request->alamat,
-                    'tgl_masuk' => $request->tgl_masuk,
-                    'id_divisi' => $request->id_divisi,
-                    'foto_profil' => $fotoProfilName,
-                ]
-            );
+            // Simpan foto baru
+            $foto = $request->file('foto_profil');
+            $fotoProfilName = Str::random(40) . '.' . $foto->getClientOriginalExtension();
+            $foto->storeAs('images/foto_profil', $fotoProfilName, 'public');
         }
 
-        // Redirect back with success message
-        return redirect()->route('admin.user.index')->with('success', 'Data user berhasil diperbarui');
+        // Update atau insert data karyawan
+        $user->karyawan()->updateOrCreate(
+            ['id_user' => $user->id_user],
+            [
+                'nip' => $request->nip,
+                'no_hp' => $request->no_hp,
+                'alamat' => $request->alamat,
+                'tgl_masuk' => $request->tgl_masuk,
+                'id_divisi' => $request->id_divisi,
+                'foto_profil' => $fotoProfilName,
+            ]
+        );
     }
+
+    return redirect()->route('admin.user.index')->with('success', 'Data user berhasil diperbarui');
+}
 
     // Delete a user from the database
     public function destroy($id)

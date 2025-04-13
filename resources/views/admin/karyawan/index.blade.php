@@ -51,8 +51,14 @@
                         {{ $user->karyawan->divisi->nama_divisi ? $user->karyawan->divisi->nama_divisi : 'Tidak ada divisi' }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $user->karyawan->tgl_masuk }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded flex items-center gap-1">
+                    <td class="px-6 py-4 text-sm text-gray-900 overflow-visible" x-data="{ open: false,  dropUp: false }">
+                        <button
+                            @click="
+                                const rect = $el.getBoundingClientRect();
+                                dropUp = window.innerHeight - rect.bottom < 200; // jika kurang dari 200px ke bawah, naik
+                                open = !open;
+                            "
+                            class="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded flex items-center gap-1">
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
 
@@ -85,6 +91,9 @@
                 @endif
             </tbody>
         </table>
+        <div class="w-full flex justify-end mt-2">
+            {{ $karyawans->links() }}
+        </div>
     </div>
 </div>
 

@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\KategoriController;
@@ -6,6 +7,8 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JurnalController;
+use App\Http\Controllers\KaryawanJurnalController;
+use App\Http\Controllers\PenilaiKategoriController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +53,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/laporan/{id}', [LaporanController::class, 'update'])->name('admin.laporan.update');
     Route::delete('/admin/laporan/{id}', [LaporanController::class, 'destroy'])->name('admin.laporan.destroy');
     Route::get('/admin/laporan/{id}/show', [LaporanController::class, 'show'])->name('admin.laporan.show');
+    Route::get('/admin/laporan/{id}/generate', [LaporanController::class, 'generatePdf'])->name('admin.laporan.generate');
+
 
     Route::get('/admin/penilaian/{id}/create', [PenilaianController::class, 'create'])->name('admin.penilaian.create');
     Route::post('/admin/penilaian/{id}', [PenilaianController::class, 'store'])->name('admin.penilaian.store');
@@ -65,11 +70,25 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // Rute untuk Karyawan, hanya bisa diakses oleh user dengan role 'karyawan'
 Route::middleware(['auth', 'role:karyawan'])->group(function () {
     Route::get('/karyawan/dashboard', fn () => view('karyawan.dashboard'))->name('karyawan.dashboard');
+
+    Route::get('/karyawan/jurnals/{id}', [KaryawanJurnalController::class, 'show'])->name('karyawan.jurnal.show');
+    Route::get('/karyawan/jurnals/{id}/create', [KaryawanJurnalController::class, 'create'])->name('karyawan.jurnal.create');
+    Route::post('/karyawan/jurnals/{id}', [KaryawanJurnalController::class, 'store'])->name('karyawan.jurnal.store');
+    Route::get('/karyawan/jurnals/{id}/edit', [KaryawanJurnalController::class, 'edit'])->name('karyawan.jurnal.edit');
+    Route::put('/karyawan/jurnals/{id}', [KaryawanJurnalController::class, 'update'])->name('karyawan.jurnal.update');
+    Route::delete('/karyawan/jurnals/{id}', [KaryawanJurnalController::class, 'destroy'])->name('karyawan.jurnal.destroy');
 });
 
 // Rute untuk Penilai, hanya bisa diakses oleh user dengan role 'penilai'
 Route::middleware(['auth', 'role:penilai'])->group(function () {
     Route::get('/penilai/dashboard', fn () => view('penilai.dashboard'))->name('penilai.dashboard');
+
+    Route::get('penilai/kategori-penilaian', [PenilaiKategoriController::class, 'index'])->name('penilai.kategori-penilaian.index');
+    Route::get('penilai/kategori-penilaian/create', [PenilaiKategoriController::class, 'create'])->name('penilai.kategori-penilaian.create');
+    Route::post('penilai/kategori-penilaian', [PenilaiKategoriController::class, 'store'])->name('penilai.kategori-penilaian.store');
+    Route::get('penilai/kategori-penilaian/{id}/edit', [PenilaiKategoriController::class, 'edit'])->name('penilai.kategori-penilaian.edit');
+    Route::put('penilai/kategori-penilaian/{id}', [PenilaiKategoriController::class, 'update'])->name('penilai.kategori-penilaian.update');
+    Route::delete('penilai/kategori-penilaian/{id}', [PenilaiKategoriController::class, 'destroy'])->name('penilai.kategori-penilaian.destroy');
 });
 
 // Rute untuk Kepala, hanya bisa diakses oleh user dengan role 'kepala'
