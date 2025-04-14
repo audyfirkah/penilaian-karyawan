@@ -39,4 +39,23 @@ class PenilaianController extends Controller
 
         return view('penilai.penilaian.create', compact('karyawan', 'penilai', 'kategoris'));
     }
+
+    public function store(Request $request, $id)
+    {
+        dd($request->all());
+        // Logic to store a new penilaian
+        $validatedData = $request->validate([
+            'id_karyawan' => 'required|exists:karyawans,id_karyawan',
+            'id_penilai' => 'required|exists:users,id_user',
+            'tanggal_penilaian' => 'required|date',
+            'periode' => 'required|string|max:255',
+            'total_skor' => 'required|numeric|min:0',
+            'status' => 'required|string|max:255',
+            'catatan' => 'nullable|string|max:255',
+        ]);
+
+        Penilaian::create($validatedData);
+
+        return redirect()->route('penilai.penilaian.index')->with('success', 'Penilaian created successfully.');
+    }
 }

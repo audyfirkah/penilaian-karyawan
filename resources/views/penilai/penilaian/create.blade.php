@@ -7,7 +7,7 @@
 <div class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
     <h1 class="text-2xl font-semibold text-gray-800 mb-6">Nilai {{ $karyawan->user->nama }}</h1>
 
-    <form action="{{ route('penilai.penilaian.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+    <form action="{{ route('penilai.penilaian.store', [$karyawan->id_karyawan, $penilai->id_user]) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
         @csrf
         <input type="hidden" value="{{ $penilai->id_user }}" name="id_penilai">
         <input type="hidden" value="{{ $karyawan->id_karyawan }}" name="id_karyawan">
@@ -22,6 +22,12 @@
                 @enderror
             </div>
         @endforeach
+
+        <textarea name="catatan" id="catatan" rows="4" placeholder="Catatan"
+            class="w-full px-4 py-2 border rounded @error('catatan') border-red-500 @enderror">{{ old('catatan') }}</textarea>
+        @error('catatan')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+        @enderror
 
 
 

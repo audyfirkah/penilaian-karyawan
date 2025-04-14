@@ -93,7 +93,7 @@ Route::middleware(['auth', 'role:penilai'])->group(function () {
     Route::get('/penilai/penilaian/list', [PenilaianController::class, 'list'])->name('penilai.penilaian.list');
 
     Route::get('/penilai/penilaian/{id}/create', [PenilaianController::class, 'create'])->name('penilai.penilaian.create');
-    Route::post('/penilai/penilaian/{id}', [PenilaianController::class, 'store'])->name('penilai.penilaian.store');
+    Route::post('/penilai/penilaian/{id}/store', [PenilaianController::class, 'store'])->name('penilai.penilaian.store');
     Route::get('/penilai/penilaian/{id}/edit', [PenilaianController::class, 'edit'])->name('penilai.penilaian.edit');
     Route::put('/penilai/penilaian/{id}', [PenilaianController::class, 'update'])->name('penilai.penilaian.update');
     Route::delete('/penilai/penilaian/{id}', [PenilaianController::class, 'destroy'])->name('penilai.penilaian.destroy');
