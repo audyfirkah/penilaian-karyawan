@@ -40,7 +40,7 @@
                 @forelse ($jurnals as $index => $jurnal)
                 <tr data-date="{{ $jurnal->tanggal }}">
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($jurnal->tanggal)->format('d m Y') }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($jurnal->tanggal)->format('d-m-Y') }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $jurnal->aktivitas }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">
                         @if ($jurnal->lampiran)

@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JurnalController;
 use App\Http\Controllers\KaryawanJurnalController;
 use App\Http\Controllers\PenilaiKategoriController;
+use App\Http\Controllers\PenilaianController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,11 +57,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/laporan/{id}/generate', [LaporanController::class, 'generatePdf'])->name('admin.laporan.generate');
 
 
-    Route::get('/admin/penilaian/{id}/create', [PenilaianController::class, 'create'])->name('admin.penilaian.create');
-    Route::post('/admin/penilaian/{id}', [PenilaianController::class, 'store'])->name('admin.penilaian.store');
-
-
-
     Route::get('/admin/jurnals/{id}/show', [JurnalController::class, 'show'])->name('admin.jurnal.show');
     Route::get('/admin/jurnals/{id}/edit', [JurnalController::class, 'edit'])->name('admin.jurnal.edit');
     Route::put('/admin/jurnals/{id}', [JurnalController::class, 'update'])->name('admin.jurnal.update');
@@ -89,6 +85,19 @@ Route::middleware(['auth', 'role:penilai'])->group(function () {
     Route::get('penilai/kategori-penilaian/{id}/edit', [PenilaiKategoriController::class, 'edit'])->name('penilai.kategori-penilaian.edit');
     Route::put('penilai/kategori-penilaian/{id}', [PenilaiKategoriController::class, 'update'])->name('penilai.kategori-penilaian.update');
     Route::delete('penilai/kategori-penilaian/{id}', [PenilaiKategoriController::class, 'destroy'])->name('penilai.kategori-penilaian.destroy');
+
+
+    Route::get('/penilai/penilaian/', [PenilaianController::class, 'index'])->name('penilai.penilaian.index');
+
+    Route::get('/penilai/karyawan/{id}/detail', [KaryawanController::class, 'detail'])->name('penilai.karyawan.detail');
+    Route::get('/penilai/penilaian/list', [PenilaianController::class, 'list'])->name('penilai.penilaian.list');
+
+    Route::get('/penilai/penilaian/{id}/create', [PenilaianController::class, 'create'])->name('penilai.penilaian.create');
+    Route::post('/penilai/penilaian/{id}', [PenilaianController::class, 'store'])->name('penilai.penilaian.store');
+    Route::get('/penilai/penilaian/{id}/edit', [PenilaianController::class, 'edit'])->name('penilai.penilaian.edit');
+    Route::put('/penilai/penilaian/{id}', [PenilaianController::class, 'update'])->name('penilai.penilaian.update');
+    Route::delete('/penilai/penilaian/{id}', [PenilaianController::class, 'destroy'])->name('penilai.penilaian.destroy');
+    Route::delete('/penilai/penilaian/{id}/detail', [PenilaianController::class, 'detail'])->name('penilai.penilaian.detail');
 });
 
 // Rute untuk Kepala, hanya bisa diakses oleh user dengan role 'kepala'

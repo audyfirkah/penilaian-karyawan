@@ -39,7 +39,7 @@
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $jurnal->aktivitas }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">
                         @if ($jurnal->lampiran)
-                        <a href="{{ asset('storage/lampiran_jurnal/' . $jurnal->lampiran) }}" target="_blank" class="text-blue-600 hover:underline">Lihat File</a>
+                        <a href="{{ asset('storage/lampiran_jurnal/' . $jurnal->lampiran . '.pdf') }}" target="_blank" class="text-blue-600 hover:underline">Lihat File</a>
                         @else
                         <span class="text-gray-400 italic">Tidak ada</span>
                         @endif

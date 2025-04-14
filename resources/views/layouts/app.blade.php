@@ -22,7 +22,18 @@
         <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
       </svg>
     </button>
-    <span class="ml-3 text-xl font-semibold text-gray-800 dark:text-white">Dashboard</span>
+    <span class="ml-3 text-xl font-semibold text-gray-800 dark:text-white">
+        @if (Auth::user()->role == 'admin')
+            <a href="{{ route('admin.dashboard') }}">
+                {{ Auth::user()->nama }}
+            </a>
+        @elseif (Auth::user()->role == 'karyawan')
+            <a href="{{ route('karyawan.dashboard') }}" class="text-gray-800 dark:text-white flex items-center">
+                <img class="w-8 h-8 mr-2 rounded-full border border-gray-200" src="{{ asset('storage/images/foto_profil/' . Auth::user()->karyawan->foto_profil) }}" alt="Foto Profil">
+                <p>{{ Auth::user()->nama }}</p>
+            </a>
+        @endif
+    </span>
   </div>
 </nav>
 
@@ -126,7 +137,7 @@
     <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
         <form action="{{ route('logout') }}" method="POST" class="w-full">
             @csrf
-            <button type="submit" class="flex items-center p-2 text-red-600 rounded-lg hover:bg-red-100 cursor-pointer dark:hover:bg-red-600 hover:text-gray-900 group w-full">
+            <button type="submit" class="flex items-center p-2 text-red-600 rounded-lg hover:bg-red-500 hover:text-white border border-red-500 cursor-pointer dark:hover:bg-red-600 dark:hover:text-gray-900 group w-full">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
             </button>

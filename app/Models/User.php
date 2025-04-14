@@ -39,6 +39,10 @@ public function divisi()
 {
     return $this->belongsTo(Divisi::class, 'id_divisi');
 }
+    public function penilaian()
+    {
+        return $this->hasMany(Penilaian::class, 'id_penilai', 'id_user');
+    }
 
 
 
