@@ -16,6 +16,8 @@ class JurnalSeeder extends Seeder
         Jurnal::create([
             'id_karyawan' => 1,
             'tanggal' => now(),
+            'status' => 'menunggu',
+            'approved_by' => 2,
             'aktivitas' => 'Mengerjakan laporan bulanan',
             'lampiran' => null,
         ]);

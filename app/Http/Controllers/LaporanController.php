@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Laporan;
 use App\Models\Karyawan;
 use App\Models\User;
+use App\Models\KategoriPenilaian;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
@@ -127,6 +128,53 @@ class LaporanController extends Controller
     }
 
     return $pdf->download('laporan_'.$laporan->karyawan->user->nama .'_'. $laporan->periode .'_'. $laporan->created_at . '.pdf');
+}
+
+public function detail($id) {
+    $laporan = Laporan::with('karyawan.user')->findOrFail($id);
+    $periode = $laporan->periode;
+    $createdAt = $laporan->created_at;
+
+    // Awal dan akhir rentang berdasarkan periode
+    switch ($periode) {
+        case 'bulanan':
+            $start = $createdAt->copy()->startOfMonth();
+            $end = $createdAt->copy()->endOfMonth();
+            break;
+        case 'semester':
+            $start = $createdAt->copy()->subMonths(5)->startOfMonth(); // 6 bulan total
+            $end = $createdAt->copy()->endOfMonth();
+            break;
+        case 'tahunan':
+            $start = $createdAt->copy()->subMonths(11)->startOfMonth(); // 12 bulan total
+            $end = $createdAt->copy()->endOfMonth();
+            break;
+        default:
+            $start = $createdAt->copy()->startOfMonth();
+            $end = $createdAt->copy()->endOfMonth();
+    }
+
+    // Ambil semua data penilaian & detail penilaian sesuai periode dan karyawan
+    $penilaians = \App\Models\Penilaian::with(['detailPenilaians', 'penilai'])
+        ->where('id_karyawan', $laporan->id_karyawan)
+        ->whereBetween('created_at', [$start, $end])
+        ->get();
+
+    // Data lain bisa ditambahkan jika perlu
+    $jurnals = \App\Models\Jurnal::where('id_karyawan', $laporan->id_karyawan)
+        ->whereBetween('tanggal', [$start, $end])
+        ->get();
+
+    $kategoris = KategoriPenilaian::all();
+
+        if(Auth::user()->role == 'admin'){
+            return view('admin.laporan.detail', compact('laporan', 'penilaians', 'jurnals', 'start', 'end', 'kategoris'));
+        } else if(Auth::user()->role == 'kepala sekolah'){
+            return view('kepala.laporan.detail', compact('laporan', 'penilaians', 'jurnals', 'start', 'end', 'kategoris'));;
+        }
+        else {
+            return;
+        }
 }
 
 }

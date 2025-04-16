@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('jurnals', function (Blueprint $table) {
              $table->id('id_jurnal');
             $table->unsignedBigInteger('id_karyawan');
+            $table->unsignedBigInteger('approved_by')->nullable();
             $table->date('tanggal');
             $table->text('aktivitas');
             $table->string('lampiran')->nullable();
+            $table->enum('status', ['menunggu', 'disetujui', 'revisi']);
             $table->timestamps();
 
+            $table->foreign('approved_by')->references('id_user')->on('users')->onDelete('cascade');
             $table->foreign('id_karyawan')->references('id_karyawan')->on('karyawans')->onDelete('cascade');
         });
     }

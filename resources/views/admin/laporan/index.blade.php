@@ -43,7 +43,11 @@
                 @foreach ($laporans as $index => $laporan)
                 <tr class="laporan-row" data-created="{{ $laporan->created_at }}">
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $laporan->karyawan->user->nama }}</td>
+                    <td class="px-6 py-4 text-sm text-blue-900 underline">
+                        <a href="{{ route('admin.laporan.detail', $laporan->id_laporan) }}">
+                            {{ $laporan->karyawan->user->nama }}
+                         </a>
+                    </td>
                     <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $laporan->periode }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $laporan->jenis }}</td>
                     <td class="px-6 py-4 text-sm">

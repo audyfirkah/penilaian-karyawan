@@ -50,9 +50,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/laporan/{id}/create', [LaporanController::class, 'create'])->name('admin.laporan.create');
     Route::post('/admin/laporan/{id}/store', [LaporanController::class, 'store'])->name('admin.laporan.store');
     Route::get('/admin/laporan/list', [LaporanController::class, 'list'])->name('admin.laporan.list');
+    Route::get('/admin/laporan/{id}/detail', [LaporanController::class, 'detail'])->name('admin.laporan.detail');
 
     // routes/web.php
-    Route::get('admin/laporan/{id}/export', [LaporanController::class, 'exportPdf'])->name('laporan.export');
+    Route::get('admin/laporan/{id}/export', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export');
 
 
     Route::get('/admin/jurnals/{id}/show', [JurnalController::class, 'show'])->name('admin.jurnal.show');
@@ -116,7 +117,7 @@ Route::middleware(['auth', 'role:kepala sekolah'])->group(function () {
     Route::get('/kepala/laporan/list', [LaporanController::class, 'list'])->name('kepala.laporan.list');
 
     // routes/web.php
-    Route::get('kepala/laporan/{id}/export', [LaporanController::class, 'exportPdf'])->name('admin.laporan.export');
+    Route::get('kepala/laporan/{id}/export', [LaporanController::class, 'exportPdf'])->name('laporan.export');
 
 });
 
