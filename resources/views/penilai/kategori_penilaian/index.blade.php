@@ -31,7 +31,6 @@
                 <tr>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">No</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Nama Kategori</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Bobot</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
@@ -42,7 +41,6 @@
                 <tr class="kategori-row">
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kategori->nama_kategori }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $kategori->bobot }}%</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $kategori->deskripsi ?? '-' }}</td>
                     <td class="px-6 py-4 text-sm space-x-2 flex items-center gap-2">
                         <a href="{{ route('penilai.kategori-penilaian.edit', $kategori->id_kategori) }}"  class="inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition">

@@ -15,6 +15,11 @@ class Jurnal extends Model
         'lampiran',
     ];
 
+    protected $casts = [
+    'tanggal' => 'date',
+];
+
+
     public function karyawan()
     {
         return $this->belongsTo(Karyawan::class, 'id_karyawan');

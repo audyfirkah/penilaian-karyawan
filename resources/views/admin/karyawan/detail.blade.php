@@ -71,13 +71,6 @@
                 <span>Lihat Jurnal</span>
             </a>
 
-            <a href="{{ route('admin.penilaian.create', $karyawan->id_karyawan) }}"
-            class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition">
-                <i class="fas fa-star"></i>
-                <span>Nilai</span>
-            </a>
-
-
         </div>
 
     </div>

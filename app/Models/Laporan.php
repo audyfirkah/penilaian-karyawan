@@ -10,9 +10,8 @@ class Laporan extends Model
     protected $primaryKey = 'id_laporan';
     protected $fillable = [
         'id_karyawan',
-        'tanggal',
-        'status',
-        'deskripsi',
+        'periode',
+        'jenis'
     ];
 
     public function karyawan()

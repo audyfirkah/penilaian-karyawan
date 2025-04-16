@@ -22,7 +22,6 @@ class KategoriController extends Controller
     {
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
-            'bobot' => 'required|numeric|between:0,100',
             'deskripsi' => 'nullable|string',
         ]);
 
@@ -41,7 +40,6 @@ class KategoriController extends Controller
     {
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
-            'bobot' => 'required|numeric|between:0,100',
             'deskripsi' => 'nullable|string',
         ]);
 

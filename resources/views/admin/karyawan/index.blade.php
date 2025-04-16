@@ -63,9 +63,6 @@
                         </button>
 
                         <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-10">
-                            <a href="{{ route('admin.penilaian.create', $user->id_user) }}" class="block px-4 py-2 border-b border-gray-100 hover:bg-green-100 text-green-600">
-                                <i class="fas fa-star mr-1"></i> Nilai
-                            </a>
                             <a href="{{ route('admin.karyawan.edit', $user->id_user) }}" class="block px-4 py-2 border-b border-gray-100 hover:bg-blue-100 text-blue-600">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </a>

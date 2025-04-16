@@ -18,14 +18,6 @@
         </div>
 
         <div>
-            <label for="bobot" class="block text-gray-700 font-medium mb-1">Bobot (%)</label>
-            <input type="number" name="bobot" id="bobot" value="{{ old('bobot') }}" class="w-full px-4 py-2 border rounded @error('bobot') border-red-500 @enderror" step="0.01" min="0" max="100">
-            @error('bobot')
-                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div>
             <label for="deskripsi" class="block text-gray-700 font-medium mb-1">Deskripsi</label>
             <textarea name="deskripsi" id="deskripsi" rows="4" class="w-full px-4 py-2 border rounded @error('deskripsi') border-red-500 @enderror">{{ old('deskripsi') }}</textarea>
             @error('deskripsi')

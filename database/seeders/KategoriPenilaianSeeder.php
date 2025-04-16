@@ -14,8 +14,8 @@ class KategoriPenilaianSeeder extends Seeder
     public function run(): void
     {
         KategoriPenilaian::insert([
-            ['nama_kategori' => 'Kedisiplinan', 'bobot' => 30, 'deskripsi' => 'Tingkat disiplin kerja'],
-            ['nama_kategori' => 'Kerjasama', 'bobot' => 25, 'deskripsi' => 'Kemampuan bekerja sama'],
+            ['nama_kategori' => 'Kedisiplinan', 'deskripsi' => 'Tingkat disiplin kerja'],
+            ['nama_kategori' => 'Kerjasama', 'deskripsi' => 'Kemampuan bekerja sama'],
         ]);
     }
 }

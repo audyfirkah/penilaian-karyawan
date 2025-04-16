@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_penilai'); // user
             $table->date('tanggal_penilaian');
             $table->enum('periode', ['bulanan', 'semester', 'tahunan']);
-            $table->decimal('total_skor', 10, 2);
+            $table->decimal('total_skor', 10, 2)->nullable();
             $table->string('keterangan')->nullable();
             $table->text('catatan')->nullable();
             $table->timestamps();

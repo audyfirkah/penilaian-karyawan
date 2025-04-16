@@ -11,7 +11,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
         <!-- Search -->
         <div class="flex items-center gap-2">
-            <input type="text" id="searchInput" placeholder="Cari nama atau email..." class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="searchInput" placeholder="Cari..." class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
             <input type="date" id="dateFilter" class="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
             <button id="resetFilter" class="bg-red-100 text-red-600 px-3 py-2 rounded hover:bg-red-200 transition flex items-center text-center">
                 <i class="fas fa-sync-alt"></i>
@@ -46,8 +46,8 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $user->karyawan->tgl_masuk }}</td>
                     <td class="px-6 py-4 text-sm space-x-2 flex items-center gap-2">
-                            <a href="{{ route('penilai.penilaian.create', $user->karyawan->id_karyawan) }}" class="block rounded p-2 bg-green-100 hover:bg-green-300 text-green-600">
-                                <i class="fas fa-star mr-1"></i> Nilai
+                            <a href="{{ route('kepala.laporan.create', $user->karyawan->id_karyawan) }}" class="block rounded p-2 bg-green-100 hover:bg-green-300 text-green-600">
+                                <i class="fas fa-plus mr-1"></i> pilih
                             </a>
                             {{-- <a href="{{ route('penilai.karyawan.detail', $user->karyawan) }}" class="block rounded p-2 bg-yellow-100 hover:bg-yellow-300 text-yellow-600">
                                 <i class="fas fa-eye mr-1"></i> Detail

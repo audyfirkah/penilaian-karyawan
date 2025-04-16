@@ -9,23 +9,27 @@ use App\Models\User;
 
 class Penilaian extends Model
 {
-    protected $table = 'penilaians';
-    protected $primarykey = 'id_penilaian';
-    protected $fillable = [
-        'id_karyawan',
-        'id_penilai',
-        'tanggal_penilaian',
-        'periode',
-        'total_skor',
-        'status',
-        'catatan',
-        'created_at',
-        'updated_at'
-    ];
+    protected $primaryKey = 'id_penilaian';
+public $incrementing = true;
+protected $keyType = 'int';
+
+protected $fillable = [
+    'id_karyawan',
+    'id_penilai',
+    'tanggal_penilaian',
+    'periode',
+    'total_skor',
+    'keterangan',
+    'catatan',
+];
+
+protected $casts = [
+    'tanggal_penilaian' => 'date',
+];
 
     public function karyawan()
     {
-        return $this->belongsTo(Karyawan::class, 'id_karyawan');
+        return $this->belongsTo(Karyawan::class, 'id_karyawan', 'id_karyawan');
     }
 
     public function kategori()
@@ -36,5 +40,10 @@ class Penilaian extends Model
     public function penilai()
     {
         return $this->belongsTo(User::class, 'id_penilai');
+    }
+
+    public function detailPenilaians()
+    {
+        return $this->hasMany(DetailPenilaian::class, 'id_penilaian', 'id_penilaian');
     }
 }

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('kategori_penilaians', function (Blueprint $table) {
              $table->id('id_kategori');
             $table->string('nama_kategori');
-            $table->decimal('bobot', 5, 2);
             $table->text('deskripsi')->nullable();
             $table->timestamps();
         });

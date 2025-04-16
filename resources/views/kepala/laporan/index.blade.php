@@ -23,7 +23,7 @@
         </div>
 
         <div class="flex w-full justify-end">
-            <a href="{{ route('admin.laporan.list') }}" class="bg-green-500 text-white hover:bg-green-700 p-2 mr-3 rounded">+ Tambah</a>
+            <a href="{{ route('kepala.laporan.list') }}" class="bg-green-500 text-white hover:bg-green-700 p-2 mr-3 rounded">+ Tambah</a>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
                     <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $laporan->periode }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $laporan->jenis }}</td>
                     <td class="px-6 py-4 text-sm">
-                        <a href="{{ route('admin.laporan.export', $laporan->id_laporan) }}" target="_blank"
+                        <a href="{{ route('laporan.export', $laporan->id_laporan) }}" target="_blank"
                         class="inline-flex items-center bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200 transition">
                             <i class="fas fa-file-export mr-1"></i> Generate
                         </a>

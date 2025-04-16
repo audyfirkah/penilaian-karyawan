@@ -14,8 +14,8 @@ class DetailPenilaianSeeder extends Seeder
     public function run(): void
     {
         DetailPenilaian::insert([
-            ['id_penilaian' => 1, 'id_kategori' => 1, 'skor' => 85.5],
-            ['id_penilaian' => 1, 'id_kategori' => 2, 'skor' => 90.0],
+            ['id_penilaian' => 1, 'id_kategori' => 1, 'skor' => 8],
+            ['id_penilaian' => 1, 'id_kategori' => 2, 'skor' => 9],
         ]);
     }
 }

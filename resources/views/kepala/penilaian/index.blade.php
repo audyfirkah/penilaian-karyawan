@@ -1,8 +1,7 @@
 @extends('layouts.app')
-
-@section('title', 'Data karyawan')
-
+@section('title', 'Penilaian')
 @section('content')
+
 
 <div class="bg-white p-6 rounded-lg shadow-md">
     <h1 class="text-2xl font-semibold text-gray-800 mb-4">Data karyawan</h1>
@@ -17,6 +16,12 @@
                 <i class="fas fa-sync-alt"></i>
             </button>
         </div>
+
+        <!-- Add karyawan Button -->
+        <a href="{{ route('kepala.penilaian.list') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition flex items-center text-center">
+            <i class="fas fa-plus"></i>
+            <span class="ml-2">Tambah Penilaian</span>
+        </a>
     </div>
 
     <!-- Table -->
@@ -25,47 +30,46 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Foto</th>
+                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">tanggal penilaian</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Nama</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Divisi</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Tanggal Masuk</th>
+                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Nama penilai</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200" id="karyawanTableBody">
-                @foreach ($karyawans as $index => $user)
-                <tr class="karyawan-row" data-date="{{ $user->karyawan->tgl_masuk }}">
+                @foreach ($penilaians as $index => $data)
+                <tr class="penilaian-row" data-date="{{ $data->created_at }}">
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 name">
-                        <img src="{{ $user->karyawan->foto_profil ? asset('storage/images/foto_profil/' . $user->karyawan->foto_profil) : asset('default-avatar.png') }}" alt="{{ $user->nama }}"
-                            class="w-10 h-10 rounded-full">
+                    <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ \Carbon\Carbon::parse($data->tanggal_penilaian)->format('d-m-Y') }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900 name">{{ $data->karyawan->user->nama }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900 name">{{ $data->penilai->nama }}</td>
+                   <td class="px-6 py-4 text-sm space-x-2 flex items-center gap-2">
+                        <a href="{{ route('kepala.penilaian.detail', $data->id_penilaian) }}" class="cursor-pointer inline-flex items-center bg-yellow-100 text-yellow-600 px-3 py-1 rounded hover:bg-yellow-200 transition">
+                            <i class="fas fa-eye mr-1"></i>
+                        </a>
+                        {{-- <a href="{{ route('kepala.penilaian.edit', $data->id_penilaian) }}" class="cursor-pointer inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition">
+                            <i class="fas fa-edit mr-1"></i>
+                        </a>
+                        <form action="{{ route('kepala.penilaian.destroy', $data->id_penilaian) }}" method="POST" class="inline delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="cursor-pointer delete-button inline-flex items-center bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition">
+                                <i class="fas fa-trash mr-1"></i>
+                            </button>
+                        </form> --}}
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 name">{{ $user->nama }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 email">
-                        {{ $user->karyawan->divisi->nama_divisi ? $user->karyawan->divisi->nama_divisi : 'Tidak ada divisi' }}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $user->karyawan->tgl_masuk }}</td>
-                    <td class="px-6 py-4 text-sm space-x-2 flex items-center gap-2">
-                            <a href="{{ route('penilai.penilaian.create', $user->karyawan->id_karyawan) }}" class="block rounded p-2 bg-green-100 hover:bg-green-300 text-green-600">
-                                <i class="fas fa-star mr-1"></i> Nilai
-                            </a>
-                            {{-- <a href="{{ route('penilai.karyawan.detail', $user->karyawan) }}" class="block rounded p-2 bg-yellow-100 hover:bg-yellow-300 text-yellow-600">
-                                <i class="fas fa-eye mr-1"></i> Detail
-                            </a> --}}
-                    </td>
-
                 </tr>
                 @endforeach
-                @if($karyawans->isEmpty())
+                @if($penilaians->isEmpty())
                 <tr>
-                    <td colspan="5" class="text-center px-6 py-4 text-gray-500">Tidak ada data penilai.karyawan.</td>
+                    <td colspan="5" class="text-center px-6 py-4 text-gray-500">Tidak ada data kepala.penilaian.</td>
                 </tr>
                 @endif
             </tbody>
         </table>
-        <div class="w-full flex justify-end mt-2">
-            {{ $karyawans->links() }}
-        </div>
+        {{-- <div class="w-full flex justify-end mt-2">
+            {{ $penilaians->links() }}
+        </div> --}}
     </div>
 </div>
 

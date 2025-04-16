@@ -15,7 +15,7 @@
             <p class="text-red-500 text-center mb-4">{{ session('error') }}</p>
         @endif
 
-        <form action="{{ route('login') }}" method="POST" class="space-y-4">
+        <form action="{{ route('login.submit') }}" method="POST" class="space-y-4">
             @csrf
 
             <div>

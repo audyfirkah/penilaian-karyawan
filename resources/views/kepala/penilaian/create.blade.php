@@ -6,7 +6,7 @@
 <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
     <h1 class="text-2xl font-semibold text-gray-800 mb-6">Penilaian untuk {{ $karyawan->user->nama }}</h1>
 
-    <form action="{{ route('penilai.penilaian.store', $karyawan->id_karyawan) }}" method="POST">
+    <form action="{{ route('kepala.penilaian.store', $karyawan->id_karyawan) }}" method="POST">
         @csrf
 
         <div class="mb-4">

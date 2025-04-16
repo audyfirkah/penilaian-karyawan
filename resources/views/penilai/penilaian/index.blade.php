@@ -44,11 +44,10 @@
                     <td class="px-6 py-4 text-sm text-gray-900 name">{{ $data->karyawan->user->nama }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 name">{{ $data->penilai->nama }}</td>
                    <td class="px-6 py-4 text-sm space-x-2 flex items-center gap-2">
-                    form
                         <a href="{{ route('penilai.penilaian.detail', $data->id_penilaian) }}" class="cursor-pointer inline-flex items-center bg-yellow-100 text-yellow-600 px-3 py-1 rounded hover:bg-yellow-200 transition">
                             <i class="fas fa-eye mr-1"></i>
                         </a>
-                        <a href="{{ route('penilai.penilaian.edit', $data->id_penilaian) }}" class="cursor-pointer inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition">
+                        {{-- <a href="{{ route('penilai.penilaian.edit', $data->id_penilaian) }}" class="cursor-pointer inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition">
                             <i class="fas fa-edit mr-1"></i>
                         </a>
                         <form action="{{ route('penilai.penilaian.destroy', $data->id_penilaian) }}" method="POST" class="inline delete-form">
@@ -57,7 +56,7 @@
                             <button type="button" class="cursor-pointer delete-button inline-flex items-center bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition">
                                 <i class="fas fa-trash mr-1"></i>
                             </button>
-                        </form>
+                        </form> --}}
                     </td>
                 </tr>
                 @endforeach
