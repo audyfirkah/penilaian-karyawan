@@ -33,6 +33,7 @@
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Tanggal</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aktivitas</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Lampiran</th>
+                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">status</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -49,13 +50,33 @@
                         <span class="text-gray-400 italic">Tidak ada</span>
                         @endif
                     </td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        @php
+                            $statusClass = match($jurnal->status) {
+                                'approved' => 'bg-green-100 text-green-700',
+                                'pending' => 'bg-yellow-100 text-yellow-700',
+                                'revisi' => 'bg-red-100 text-red-700',
+                                default => 'bg-gray-100 text-gray-700',
+                            };
+                        @endphp
+                        <span class="px-2 py-1 text-xs rounded {{ $statusClass }}">{{ ucfirst($jurnal->status) }}</span>
+                    </td>
                     <td class="px-6 py-4 text-sm text-gray-900 space-x-2">
-                        <a href="{{ route('karyawan.jurnal.edit', $jurnal->id_jurnal) }}" class="inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition"><i class="fas fa-edit"></i></a>
-                        <form action="{{ route('karyawan.jurnal.destroy', $jurnal->id_jurnal) }}" method="POST" class="inline delete-form">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="inline-flex items-center bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"><i class="fas fa-trash"></i></button>
-                        </form>
+                        @if ($jurnal->status == 'revisi')
+                            <a href="{{ route('karyawan.jurnal.edit', $jurnal->id_jurnal) }}" class="inline-flex items-center bg-yellow-100 text-yellow-600 px-3 py-1 rounded hover:bg-yellow-200 transition"><i class="fas fa-edit"></i></a>
+                            <p class="inline-flex items-center bg-gray-100 text-gray-600 px-3 py-1 rounded cursor-not-allowed transition"><i class="fas fa-trash"></i></p>
+                        @elseif($jurnal->status == 'pending')
+                            <a href="{{ route('karyawan.jurnal.edit', $jurnal->id_jurnal) }}" class="inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition"><i class="fas fa-edit"></i></a>
+                            <form action="{{ route('karyawan.jurnal.destroy', $jurnal->id_jurnal) }}" method="POST" class="inline delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="inline-flex items-center bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition"><i class="fas fa-trash"></i></button>
+                            </form>
+                        @else
+                            <p class="cursor-not-allowed inline-flex items-center bg-gray-100 text-gray-600 px-3 py-1 rounded  transition" disabled><i class="fas fa-edit"></i></p>
+                            <p class="inline-flex items-center bg-gray-100 text-gray-600 px-3 py-1 rounded cursor-not-allowed transition"><i class="fas fa-trash"></i></p>
+                        @endif
+
                     </td>
                 </tr>
                 @empty
@@ -65,6 +86,7 @@
                 @endforelse
             </tbody>
         </table>
+        {{ $jurnals->links() }}
     </div>
 </div>
 @endsection

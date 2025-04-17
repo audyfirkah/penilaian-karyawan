@@ -36,6 +36,7 @@ class PenilaianController extends Controller
     public function list()
     {
         $karyawans = User::where('role', 'karyawan')->with('karyawan', 'divisi')->paginate(5);
+
         if(Auth::user()->role == 'penilai') {
             return view('penilai.penilaian.list', compact('karyawans'));
         }

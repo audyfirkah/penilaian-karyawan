@@ -106,10 +106,15 @@ class LaporanController extends Controller
         ->whereBetween('tanggal', [$start, $end])
         ->get();
 
+    $historis = \App\Models\HistoriJurnal::where('id_karyawan', $laporan->id_karyawan)
+        ->whereBetween('tanggal', [$start, $end])
+        ->get();
+
     if(Auth::user()->role == 'admin'){
     $pdf = Pdf::loadView('admin.laporan.export', [
         'laporan' => $laporan,
         'penilaians' => $penilaians,
+        'historis' => $historis,
         'jurnals' => $jurnals,
         'start' => $start,
         'end' => $end,
@@ -118,6 +123,7 @@ class LaporanController extends Controller
         $pdf = Pdf::loadView('kepala.laporan.export', [
         'laporan' => $laporan,
         'penilaians' => $penilaians,
+        'historis' => $historis,
         'jurnals' => $jurnals,
         'start' => $start,
         'end' => $end,

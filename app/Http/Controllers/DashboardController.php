@@ -13,6 +13,7 @@ use App\Models\KategoriPenilaian;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
 class DashboardController extends Controller
 {
 
@@ -23,9 +24,8 @@ class DashboardController extends Controller
 
         // Ambil data jurnal sesuai bulan
         $jurnals = Jurnal::with(['karyawan.user', 'karyawan.divisi'])
-            ->whereMonth('tanggal', Carbon::parse($bulan)->month)
-            ->whereYear('tanggal', Carbon::parse($bulan)->year)
-            ->paginate(10);
+            ->where('status', 'pending')
+            ->paginate(5);
 
         // Statistik global
         $jumlahLaporan = laporan::count();
@@ -75,11 +75,22 @@ class DashboardController extends Controller
 
     public function karyawan()
     {
-        $jumlahJurnal = Jurnal::count();
-        $jurnals = Jurnal::with('karyawan.user')->paginate(5);
+        $user = auth()->user();
+        $idKaryawan = $user->karyawan->id_karyawan;
+
+        // Jumlah jurnal per status
+        $jumlahJurnal = Jurnal::where('id_karyawan', $idKaryawan)->count();
+        $jurnalApproved = Jurnal::where('id_karyawan', $idKaryawan)->where('status', 'approved')->count();
+        $jurnalPending = Jurnal::where('id_karyawan', $idKaryawan)->where('status', 'pending')->count();
+        $jurnalRevisi = Jurnal::where('id_karyawan', $idKaryawan)->where('status', 'revisi')->count();
+
+        $jurnals = Jurnal::where('id_karyawan', $idKaryawan)->orderBy('tanggal', 'desc')->paginate(5);
 
         return view('karyawan.dashboard', compact(
             'jumlahJurnal',
+            'jurnalApproved',
+            'jurnalPending',
+            'jurnalRevisi',
             'jurnals'
         ));
     }
@@ -87,12 +98,15 @@ class DashboardController extends Controller
     public function penilai(){
         $jumlahPenilaian = Penilaian::count();
         $jumlahKategori = KategoriPenilaian::count();
-        $penilaians = Penilaian::with('karyawan', 'penilai', 'detailPenilaians.kategori')->paginate(5);
+        $penilaians = Penilaian::with('karyawan.user', 'penilai', 'detailPenilaians.kategori')->latest()->paginate(5);
+
+        $karyawanBelumDinilai = Karyawan::whereDoesntHave('penilaians')->with('user', 'divisi')->get();
 
         return view('penilai.dashboard', compact(
             'jumlahPenilaian',
             'jumlahKategori',
-            'penilaians'
+            'penilaians',
+            'karyawanBelumDinilai'
         ));
     }
 

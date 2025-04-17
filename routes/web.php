@@ -64,6 +64,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/jurnals/{id}/edit', [JurnalController::class, 'edit'])->name('admin.jurnal.edit');
     Route::put('/admin/jurnals/{id}', [JurnalController::class, 'update'])->name('admin.jurnal.update');
     Route::delete('/admin/jurnals/{id}', [JurnalController::class, 'destroy'])->name('admin.jurnal.destroy');
+    Route::post('/admin/jurnals/{id}/revisi', [JurnalController::class, 'revisi'])->name('admin.jurnal.revisi');
+    Route::post('/admin/jurnals/{id}/approve', [JurnalController::class, 'approve'])->name('admin.jurnal.approve');
 });
 
 // Rute untuk Karyawan, hanya bisa diakses oleh user dengan role 'karyawan'
@@ -76,6 +78,9 @@ Route::middleware(['auth', 'role:karyawan'])->group(function () {
     Route::get('/karyawan/jurnals/{id}/edit', [KaryawanJurnalController::class, 'edit'])->name('karyawan.jurnal.edit');
     Route::put('/karyawan/jurnals/{id}', [KaryawanJurnalController::class, 'update'])->name('karyawan.jurnal.update');
     Route::delete('/karyawan/jurnals/{id}', [KaryawanJurnalController::class, 'destroy'])->name('karyawan.jurnal.destroy');
+
+    Route::get('/karyawan/jurnals/{id}/histori', [JurnalController::class, 'histori'])->name('karyawan.jurnal.histori');
+
 });
 
 // Rute untuk Penilai, hanya bisa diakses oleh user dengan role 'penilai'

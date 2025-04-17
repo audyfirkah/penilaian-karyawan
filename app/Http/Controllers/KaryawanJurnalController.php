@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Jurnal;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 class KaryawanJurnalController extends Controller
@@ -21,8 +22,9 @@ class KaryawanJurnalController extends Controller
 
         $jurnals = Jurnal::with(['karyawan.user'])
             ->where('id_karyawan', $id)
+            ->orderByRaw("FIELD(status, 'revisi', 'pending', 'approved')")
             ->latest()
-            ->get();
+            ->paginate(5);
 
         return view('karyawan.jurnal.index', compact('jurnals'));
     }
@@ -49,6 +51,7 @@ public function store(Request $request)
     $jurnal->id_karyawan = Auth::user()->karyawan->id_karyawan;
     $jurnal->tanggal = $request->tanggal;
     $jurnal->aktivitas = $request->aktivitas;
+    $jurnal->status = 'pending';
 
     if ($request->hasFile('lampiran')) {
         $lampiran = $request->file('lampiran')->store('lampiran_jurnal', 'public');
@@ -69,14 +72,14 @@ public function store(Request $request)
     public function update(Request $request, $id)
     {
         $request->validate([
-            'tanggal' => 'required|date',
             'aktivitas' => 'required|string|max:255',
             'lampiran' => 'nullable|file|mimes:docx,mp4,pdf,jpg,png|max:2048',
         ]);
 
         $jurnal = Jurnal::findOrFail($id);
-        $jurnal->tanggal = $request->tanggal;
+        $jurnal->tanggal = Carbon::now()->format('Y-m-d');
         $jurnal->aktivitas = $request->aktivitas;
+        $jurnal->status = 'pending';
 
         if ($request->hasFile('lampiran')) {
             // Hapus lampiran lama jika ada

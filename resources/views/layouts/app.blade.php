@@ -65,6 +65,12 @@
           <span class="flex-1 ms-3 whitespace-nowrap">Jurnal</span>
         </a>
       </li>
+      <li>
+        <a href="{{ route('karyawan.jurnal.histori', Auth::user()->karyawan->id_karyawan) }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <i class="fas fa-flag"></i>
+          <span class="flex-1 ms-3 whitespace-nowrap">Histori</span>
+        </a>
+      </li>
     </ul>
     @elseif (Auth::user()->role == 'admin')
          <ul class="space-y-2 font-medium">

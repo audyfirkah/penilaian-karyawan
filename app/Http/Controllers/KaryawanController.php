@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Karyawan;
 use App\Models\User;
 use App\Models\Divisi;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class KaryawanController extends Controller
 {

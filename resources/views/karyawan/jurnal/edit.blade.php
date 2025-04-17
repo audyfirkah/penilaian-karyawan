@@ -9,16 +9,6 @@
     <form action="{{ route('karyawan.jurnal.update', Auth::user()->karyawan->id_karyawan) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
-        <!-- Tanggal -->
-        <div class="mb-4">
-            <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal</label>
-            <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal', $jurnal->tanggal) }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:outline-none">
-            @error('tanggal')
-            <span class="text-sm text-red-500">{{ $message }}</span>
-            @enderror
-        </div>
-
         <!-- Aktivitas -->
         <div class="mb-4">
             <label for="aktivitas" class="block text-sm font-medium text-gray-700">Aktivitas</label>

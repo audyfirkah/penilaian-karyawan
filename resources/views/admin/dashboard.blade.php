@@ -54,6 +54,7 @@
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Tanggal</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Aktivitas</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Status</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -63,8 +64,32 @@
                             <td class="px-4 py-2 text-sm">{{ $jurnal->karyawan->user->nama ?? '-' }}</td>
                             <td class="px-4 py-2 text-sm">{{ $jurnal->karyawan->divisi->nama_divisi ?? '-' }}</td>
                             <td class="px-4 py-2 text-sm">{{ \Carbon\Carbon::parse($jurnal->tanggal)->format('d-m-Y') }}</td>
-                            <td class="px-4 py-2 text-sm">{{ $jurnal->aktivitas }}</td>
-                            <td class="px-4 py-2 text-sm capitalize">{{ $jurnal->status }}</td>
+                            <td class="px-4 py-2 text-sm">
+                                {{ $jurnal->aktivitas }}
+                                @if ($jurnal->lampiran)
+                                    <br>
+                                    <a href="{{ asset('storage/' . $jurnal->lampiran) }}" class="text-blue-500 underline text-xs" target="_blank">Lihat Lampiran</a>
+                                @endif
+                            </td>
+                            <td class="px-4 py-2 text-sm">
+                                <span class="
+                                    px-2 py-1 rounded text-white text-xs
+                                    @if($jurnal->status == 'approved') bg-green-600
+                                    @elseif($jurnal->status == 'pending') bg-yellow-500
+                                    @else bg-red-600 @endif
+                                ">
+                                    {{ ucfirst($jurnal->status) }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-2 text-sm">
+                                <div class="mt-2 flex gap-1">
+                                    <form action="{{ route('admin.jurnal.approve', $jurnal->id_jurnal) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="text-sm bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded">Approve</button>
+                                    </form>
+                                    <button onclick="openModal({{ $jurnal->id_jurnal }})" class="text-sm bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded">Revisi</button>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -75,6 +100,26 @@
             </table>
             {{ $jurnals->links() }}
         </div>
+    </div>
+</div>
+
+
+
+<!-- Modal Revisi -->
+<div id="modalRevisi" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-lg">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Catatan Revisi</h2>
+        <form id="formRevisi" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Catatan</label>
+                <textarea name="catatan" rows="3" class="w-full border rounded p-2" required></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-500 text-white rounded">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Kirim Revisi</button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
@@ -129,5 +174,33 @@
         const month = this.value;
         window.location.href = `?bulan=${month}`;
     });
+</script>
+
+<script>
+    function openModal(jurnalId) {
+        const modal = document.getElementById('modalRevisi');
+        const form = document.getElementById('formRevisi');
+        form.action = '{{ route("admin.jurnal.revisi", ":id") }}'.replace(':id', jurnalId);
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('modalRevisi');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+</script>
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 2500,
+            showConfirmButton: false
+        });
+    @endif
 </script>
 @endsection

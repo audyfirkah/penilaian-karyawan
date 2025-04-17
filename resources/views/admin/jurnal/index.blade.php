@@ -28,6 +28,7 @@
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Tanggal</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aktivitas</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Lampiran</th>
+                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">status</th>
                     <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -43,6 +44,17 @@
                         @else
                         <span class="text-gray-400 italic">Tidak ada</span>
                         @endif
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        @php
+                            $statusClass = match($jurnal->status) {
+                                'approved' => 'bg-green-100 text-green-700',
+                                'pending' => 'bg-yellow-100 text-yellow-700',
+                                'revisi' => 'bg-red-100 text-red-700',
+                                default => 'bg-gray-100 text-gray-700',
+                            };
+                        @endphp
+                        <span class="px-2 py-1 text-xs rounded {{ $statusClass }}">{{ ucfirst($jurnal->status) }}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 space-x-2">
                         <a href="{{ route('admin.jurnal.edit', $jurnal->id_jurnal) }}" class="inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition"><i class="fas fa-edit"></i></a>

@@ -46,7 +46,7 @@
             <tr>
                 <th>Tanggal</th>
                 <th>Aktivitas</th>
-                <th>Lampiran</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
                 <tr>
                     <td>{{ $jurnal->tanggal->format('d-m-Y') }}</td>
                     <td>{{ $jurnal->aktivitas }}</td>
-                    <td>{{ $jurnal->lampiran ? $jurnal->lampiran : '-' }}</td>
+                    <td>{{ $jurnal->status }}</td>
                 </tr>
             @endforeach
         </tbody>
