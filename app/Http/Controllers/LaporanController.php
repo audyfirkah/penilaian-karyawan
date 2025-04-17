@@ -161,7 +161,8 @@ public function detail($id) {
         ->get();
 
     // Data lain bisa ditambahkan jika perlu
-    $jurnals = \App\Models\Jurnal::where('id_karyawan', $laporan->id_karyawan)
+    $jurnals = \App\Models\Jurnal::with('karyawan.user')
+        ->where('id_karyawan', $laporan->id_karyawan)
         ->whereBetween('tanggal', [$start, $end])
         ->get();
 

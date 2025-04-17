@@ -17,6 +17,10 @@ use App\Http\Controllers\DashboardController;
 // Rute untuk Admin, hanya bisa diakses oleh user dengan role 'admin'
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+    Route::get('/admin/export-jurnal', [DashboardController::class, 'exportJurnalPDF'])->name('admin.export.jurnal');
+
+
+
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.user.index');
     Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.user.create');
     Route::post('/admin/users', [UserController::class, 'store'])->name('admin.user.store');

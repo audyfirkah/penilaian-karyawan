@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('aktivitas');
             $table->string('lampiran')->nullable();
-            $table->enum('status', ['menunggu', 'disetujui', 'revisi']);
+            $table->enum('status', ['pending', 'approved', 'revisi']);
             $table->timestamps();
 
             $table->foreign('approved_by')->references('id_user')->on('users')->onDelete('cascade');

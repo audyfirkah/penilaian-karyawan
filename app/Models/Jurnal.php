@@ -24,4 +24,9 @@ class Jurnal extends Model
     {
         return $this->belongsTo(Karyawan::class, 'id_karyawan');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }

@@ -33,4 +33,7 @@ class Karyawan extends Model
     public function jurnal(){
         return $this->hasMany(Jurnal::class, 'id_karyawan');
     }
+    public function jurnals(){
+        return $this->hasMany(Jurnal::class, 'id_karyawan');
+    }
 }

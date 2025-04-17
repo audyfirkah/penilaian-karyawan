@@ -3,11 +3,11 @@
 @section('title', 'Dashboard')
 
 @section('content')
-
 <div class="container mx-auto px-4 py-6">
     <h1 class="text-3xl font-bold mb-6 text-gray-800">Dashboard Admin</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Statistik -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div class="bg-white p-4 rounded-lg shadow-md">
             <h2 class="text-xl font-semibold text-gray-700">Total Laporan</h2>
             <p class="text-2xl text-orange-600 mt-2">{{ $jumlahLaporan }}</p>
@@ -18,106 +18,116 @@
         </div>
     </div>
 
-<div class="bg-white p-6 rounded-lg shadow-md mt-4">
-    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Data User</h1>
-
-    <!-- Filter Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-        <!-- Search -->
-        <div class="flex items-center gap-2">
-            <input type="text" id="searchInput" placeholder="Cari nama atau email..." class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="date" id="dateFilter" class="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <select id="roleFilter" class="px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
-                <option value="">Semua Role</option>
-                <option value="admin">Admin</option>
-                <option value="kepala sekolah">Kepala Sekolah</option>
-                <option value="karyawan">Karyawan</option>
-                <option value="penilai">Penilai</option>
-            </select>
-            <button id="resetFilter" class="bg-red-100 text-red-600 px-3 py-2 rounded hover:bg-red-200 transition flex items-center text-center">
-                <i class="fas fa-sync-alt"></i>
-            </button>
+    <!-- Filter Bulan -->
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <label for="filterMonth" class="text-gray-700 font-semibold mr-2">Pilih Bulan:</label>
+            <input type="month" id="filterMonth" value="{{ request('bulan') }}" class="border px-2 py-1 rounded-md focus:ring focus:ring-blue-300">
         </div>
-
-        <!-- Add User Button -->
-        <a href="{{ route('admin.user.create') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition flex items-center text-center">
-            <i class="fas fa-plus"></i>
-        </a>
+        <div>
+            <a href="{{ route('admin.export.jurnal', ['bulan' => request('bulan')]) }}"
+               class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow">
+                Export PDF
+            </a>
+        </div>
     </div>
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden" id="userTable">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">No</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Nama</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Email</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Role</th>
-                    <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200" id="userTableBody">
-                @foreach ($users as $index => $user)
-                <tr class="user-row" data-created="{{ $user->created_at }}">
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 name">{{ $user->nama }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 email">{{ $user->email }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $user->role }}</td>
-                    <td class="px-6 py-4 text-sm space-x-2 flex items-center gap-2">
-                        <a href="{{ route('admin.user.edit', $user->id_user) }}" class="cursor-pointer inline-flex items-center bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition">
-                            <i class="fas fa-edit mr-1"></i>
-                        </a>
-                        <form action="{{ route('admin.user.destroy', $user->id_user) }}" method="POST" class="inline delete-form">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="cursor-pointer delete-button inline-flex items-center bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 transition">
-                                <i class="fas fa-trash mr-1"></i>
-                            </button>
-                        </form>
+    <!-- Chart -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Statistik Jurnal per Divisi</h2>
+        <canvas id="jurnalChart"></canvas>
+    </div>
 
-                    </td>
-                </tr>
-                @endforeach
-                @if($users->isEmpty())
-                <tr>
-                    <td colspan="5" class="text-center px-6 py-4 text-gray-500">Tidak ada data admin.user.</td>
-                </tr>
-                @endif
-            </tbody>
-        </table>
+    <!-- Tabel Jurnal Belum Disetujui -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Jumlah Jurnal Terisi per Divisi
+        </h2>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-200 rounded">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">No</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Nama Karyawan</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Divisi</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Tanggal</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Aktivitas</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @forelse($jurnals as $index => $jurnal)
+                        <tr>
+                            <td class="px-4 py-2 text-sm">{{ $index + 1 }}</td>
+                            <td class="px-4 py-2 text-sm">{{ $jurnal->karyawan->user->nama ?? '-' }}</td>
+                            <td class="px-4 py-2 text-sm">{{ $jurnal->karyawan->divisi->nama_divisi ?? '-' }}</td>
+                            <td class="px-4 py-2 text-sm">{{ \Carbon\Carbon::parse($jurnal->tanggal)->format('d-m-Y') }}</td>
+                            <td class="px-4 py-2 text-sm">{{ $jurnal->aktivitas }}</td>
+                            <td class="px-4 py-2 text-sm capitalize">{{ $jurnal->status }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center px-4 py-2 text-gray-500">Semua jurnal telah disetujui</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            {{ $jurnals->links() }}
+        </div>
     </div>
 </div>
-
-    </div>
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Filter fungsi
-    function filterTable() {
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        const date = document.getElementById('dateFilter').value;
-
-        document.querySelectorAll("tbody tr").forEach(row => {
-            const name = row.children[1]?.textContent.toLowerCase();
-            const email = row.children[2]?.textContent.toLowerCase();
-            const show = (!search || name.includes(search) || email.includes(search)) &&
-                         (!date || row.dataset.date === date);
-            row.style.display = show ? '' : 'none';
-        });
-    }
-
-    // Event listeners
-    document.getElementById('searchInput').addEventListener('input', filterTable);
-    document.getElementById('dateFilter').addEventListener('change', filterTable);
-    document.getElementById('resetFilter').addEventListener('click', () => {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('dateFilter').value = '';
-        filterTable();
+    const ctx = document.getElementById('jurnalChart').getContext('2d');
+    const jurnalChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($jurnalByDivisi->pluck('divisi')) !!},
+            datasets: [
+                {
+                    label: 'Approved',
+                    data: {!! json_encode($jurnalByDivisi->pluck('approved')) !!},
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                },
+                {
+                    label: 'Pending',
+                    data: {!! json_encode($jurnalByDivisi->pluck('pending')) !!},
+                    backgroundColor: 'rgba(251, 191, 36, 0.7)',
+                },
+                {
+                    label: 'Revisi',
+                    data: {!! json_encode($jurnalByDivisi->pluck('revisi')) !!},
+                    backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Jumlah Jurnal Berdasarkan Status per Divisi'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 
-
+    // Filter Bulan
+    document.getElementById('filterMonth').addEventListener('change', function () {
+        const month = this.value;
+        window.location.href = `?bulan=${month}`;
+    });
 </script>
-
 @endsection

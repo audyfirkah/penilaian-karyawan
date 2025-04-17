@@ -44,6 +44,11 @@ public function divisi()
         return $this->hasMany(Penilaian::class, 'id_penilai', 'id_user');
     }
 
+    public function jurnal()
+    {
+        return $this->hasMany(Jurnal::class, 'id_user');
+    }
+
 
 
 
