@@ -29,4 +29,8 @@ class Jurnal extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function penilaian() {
+        return $this->hasMany(Penilaian::class, 'id_jurnal', 'id_jurnal');
+    }
 }

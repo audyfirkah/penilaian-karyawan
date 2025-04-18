@@ -43,11 +43,15 @@
                 @foreach ($laporans as $index => $laporan)
                 <tr class="laporan-row" data-created="{{ $laporan->created_at }}">
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $laporan->karyawan->user->nama }}</td>
+                    <td class="px-6 py-4 text-sm text-blue-900 underline">
+                        <a href="{{ route('kepala.laporan.detail', $laporan->id_laporan) }}">
+                            {{ $laporan->karyawan->user->nama }}
+                         </a>
+                    </td>
                     <td class="px-6 py-4 text-sm text-gray-900 capitalize">{{ $laporan->periode }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $laporan->jenis }}</td>
                     <td class="px-6 py-4 text-sm">
-                        <a href="{{ route('laporan.export', $laporan->id_laporan) }}" target="_blank"
+                        <a href="{{ route('kepala.laporan.export', $laporan->id_laporan) }}" target="_blank"
                         class="inline-flex items-center bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200 transition">
                             <i class="fas fa-file-export mr-1"></i> Generate
                         </a>

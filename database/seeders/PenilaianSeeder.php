@@ -17,7 +17,6 @@ class PenilaianSeeder extends Seeder
             'id_karyawan' => 1,
             'id_penilai' => 2, // id user dengan role penilai
             'tanggal_penilaian' => now(),
-            'periode' => 'bulanan',
             'total_skor' => 8.5,
             'keterangan' => 'Baik',
             'catatan' => 'Pertahankan prestasi yang baik.',

@@ -96,31 +96,47 @@ class DashboardController extends Controller
     }
 
     public function penilai(){
-        $jumlahPenilaian = Penilaian::count();
-        $jumlahKategori = KategoriPenilaian::count();
-        $penilaians = Penilaian::with('karyawan.user', 'penilai', 'detailPenilaians.kategori')->latest()->paginate(5);
+         $jumlahPenilaian = Penilaian::count();
+    $jumlahKategori = KategoriPenilaian::count();
 
-        $karyawanBelumDinilai = Karyawan::whereDoesntHave('penilaians')->with('user', 'divisi')->get();
+    $penilaians = Penilaian::with('karyawan.user', 'penilai', 'detailPenilaians.kategori')
+        ->latest()->paginate(5);
 
-        return view('penilai.dashboard', compact(
-            'jumlahPenilaian',
-            'jumlahKategori',
-            'penilaians',
-            'karyawanBelumDinilai'
-        ));
+    // Karyawan yang belum dinilai bulan ini
+    $bulanIni = now()->format('Y-m');
+
+    $sudahDinilai = Penilaian::pluck('id_jurnal')->toArray();
+    $belumDinilai = Jurnal::whereNotIn('id_jurnal', $sudahDinilai)
+        ->get();
+
+    return view('penilai.dashboard', compact(
+        'jumlahPenilaian',
+        'jumlahKategori',
+        'penilaians',
+        'belumDinilai'
+    ));
     }
 
     public function kepala()
     {
-        $jumlahLaporan = Laporan::count();
-        $jumlahPenilaian = Penilaian::count();
+         $jumlahPenilaian = Penilaian::count();
+    $jumlahKategori = KategoriPenilaian::count();
 
-        $karyawans = User::where('role', 'karyawan')->with('karyawan', 'divisi')->paginate(5);
+    $penilaians = Penilaian::with('karyawan.user', 'penilai', 'detailPenilaians.kategori')
+        ->latest()->paginate(5);
 
-        return view('kepala.dashboard', compact(
-            'jumlahLaporan',
-            'jumlahPenilaian',
-            'karyawans'
-        ));
+    // Karyawan yang belum dinilai bulan ini
+    $bulanIni = now()->format('Y-m');
+
+    $sudahDinilai = Penilaian::pluck('id_jurnal')->toArray();
+    $belumDinilai = Jurnal::whereNotIn('id_jurnal', $sudahDinilai)
+        ->get();
+
+    return view('kepala.dashboard', compact(
+        'jumlahPenilaian',
+        'jumlahKategori',
+        'penilaians',
+        'belumDinilai'
+    ));
     }
 }

@@ -4,33 +4,21 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Penilaian untuk {{ $karyawan->user->nama }}</h1>
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Penilaian untuk {{ $jurnal->karyawan->user->nama }}</h1>
 
-    <form action="{{ route('penilai.penilaian.store', $karyawan->id_karyawan) }}" method="POST">
+    <form action="{{ route('penilai.penilaian.store', $jurnal->id_jurnal) }}" method="POST">
         @csrf
-
-        <div class="mb-4">
-            <label for="tanggal_penilaian" class="block font-medium text-gray-700">Tanggal Penilaian</label>
-            <input type="date" name="tanggal_penilaian" class="w-full border rounded px-3 py-2" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="periode" class="block font-medium text-gray-700">Periode</label>
-            <select name="periode" class="w-full border rounded px-3 py-2" required>
-                <option value="bulanan">Bulanan</option>
-                <option value="semester">Semester</option>
-                <option value="tahunan">Tahunan</option>
-            </select>
-        </div>
+        <input type="hidden" name="id_karyawan" value="{{ $jurnal->karyawan->id_karyawan }}">
+        {{-- <input type="hidden" name="id_jurnal" value="{{ $jurnal->id_jurnal }}"> --}}
+        {{-- @dd($jurnal->id_jurnal) --}}
 
         @foreach ($kategoris as $kategori)
-    <div class="mb-4">
-        <label class="block font-medium text-gray-700">{{ $kategori->nama_kategori }}</label>
-        <input type="number" name="kategori_penilaian[{{ $kategori->id_kategori }}]" min="0" max="10"
-    oninput="if(this.value > 10) this.value = 10"
-    class="w-full border rounded px-3 py-2" required>
+            <div class="mb-4">
+                <label class="block font-medium text-gray-700">{{ $kategori->nama_kategori }}</label>
+                <input type="number" name="kategori_penilaian[{{ $kategori->id_kategori }}]" min="0" max="100"
+            class="w-full border rounded px-3 py-2" required>
 
-@endforeach
+        @endforeach
 
 
 

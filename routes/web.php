@@ -99,11 +99,9 @@ Route::middleware(['auth', 'role:penilai'])->group(function () {
     Route::get('/penilai/penilaian/list', [PenilaianController::class, 'list'])->name('penilai.penilaian.list');
     Route::get('/penilai/penilaian/create/{id}', [PenilaianController::class, 'create'])->name('penilai.penilaian.create');
     Route::post('/penilai/penilaian/store/{id}', [PenilaianController::class, 'store'])->name('penilai.penilaian.store');
-    // Route::get('/penilai/penilaian/{id}/edit', [PenilaianController::class, 'edit'])->name('penilai.penilaian.edit');
-    // Route::put('/penilai/penilaian/{id}', [PenilaianController::class, 'update'])->name('penilai.penilaian.update');
-    // Route::delete('/penilai/penilaian/{id}', [PenilaianController::class, 'destroy'])->name('penilai.penilaian.destroy');
     Route::get('/penilai/penilaian/{id}/detail', [DetailPenilaianController::class, 'detail'])->name('penilai.penilaian.detail');
-    // Route::delete('/penilai/karyawan/{id}/detail', [PenilaianController::class, 'detail'])->name('penilai.karyawan.detail');
+    Route::put('/penilai/penilaian/{id}/revisi', [PenilaianController::class, 'revisi'])->name('penilai.penilaian.revisi');
+
 });
 
 // Rute untuk Kepala, hanya bisa diakses oleh user dengan role 'kepala'
@@ -114,19 +112,20 @@ Route::middleware(['auth', 'role:kepala sekolah'])->group(function () {
     Route::get('/kepala/penilaian/list', [PenilaianController::class, 'list'])->name('kepala.penilaian.list');
     Route::get('/kepala/penilaian/create/{id}', [PenilaianController::class, 'create'])->name('kepala.penilaian.create');
     Route::post('/kepala/penilaian/store/{id}', [PenilaianController::class, 'store'])->name('kepala.penilaian.store');
-    // Route::get('kepalapenilai/penilaian/{id}/edit', [PenilaianController::class, 'edit'])->name('kepala.penilaian.edit');
-    // Route::put('/kepala/penilaian/{id}', [PenilaianController::class, 'update'])->name('kepala.penilaian.update');
-    // Route::delete('/kepala/penilaian/{id}', [PenilaianController::class, 'destroy'])->name('kepala.penilaian.destroy');
     Route::get('/kepala/penilaian/{id}/detail', [DetailPenilaianController::class, 'detail'])->name('kepala.penilaian.detail');
-    // Route::delete('/kepala/karyawan/{id}/detail', [PenilaianController::class, 'detail'])->name('kepala.karyawan.detail');
+
+    Route::put('/kepala/penilaian/{id}/revisi', [PenilaianController::class, 'revisi'])->name('kepala.penilaian.revisi');
+
 
     Route::get('/kepala/laporan', [LaporanController::class, 'index'])->name('kepala.laporan.index');
     Route::get('/kepala/laporan/{id}/create', [LaporanController::class, 'create'])->name('kepala.laporan.create');
     Route::post('/kepala/laporan/{id}/store', [LaporanController::class, 'store'])->name('kepala.laporan.store');
     Route::get('/kepala/laporan/list', [LaporanController::class, 'list'])->name('kepala.laporan.list');
+    Route::get('/kepala/laporan/{id}/detail', [LaporanController::class, 'detail'])->name('kepala.laporan.detail');
+
 
     // routes/web.php
-    Route::get('kepala/laporan/{id}/export', [LaporanController::class, 'exportPdf'])->name('laporan.export');
+    Route::get('kepala/laporan/{id}/export', [LaporanController::class, 'exportPdf'])->name('kepala.laporan.export');
 
 });
 

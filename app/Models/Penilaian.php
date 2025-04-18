@@ -16,8 +16,8 @@ protected $keyType = 'int';
 protected $fillable = [
     'id_karyawan',
     'id_penilai',
+    'id_jurnal',
     'tanggal_penilaian',
-    'periode',
     'total_skor',
     'keterangan',
     'catatan',
@@ -45,5 +45,10 @@ protected $casts = [
     public function detailPenilaians()
     {
         return $this->hasMany(DetailPenilaian::class, 'id_penilaian', 'id_penilaian');
+    }
+
+    public function jurnal()
+    {
+        return $this->belongsTo(Jurnal::class, 'id_jurnal', 'id_jurnal');
     }
 }
